@@ -15,12 +15,16 @@ func _ready():
 func _process(delta):
 	var input = Vector2(0, 0)
 	
+	# if the character isnt sliding reset velocity
 	if !sliding:
-		get_node("CharacterBody2D").velocity = Vector2(0,0)
+		$CharacterBody2D.velocity = Vector2(0,0)
 	elif !(Input.is_action_pressed("move_down") || Input.is_action_pressed("move_up") || Input.is_action_pressed("move_right") || Input.is_action_pressed("move_left")):
-		get_node("CharacterBody2D").velocity = get_node("CharacterBody2D").velocity.move_toward(Vector2(0,0), delta * 3500)
+		#if user isnt inputting anything, move towards 0
+		$CharacterBody2D.velocity = $CharacterBody2D.velocity.move_toward(Vector2(0,0), delta * 3500)
 	
+	# emit singal to UI
 	emit_signal("slidingTimerSignal", slidingTimer)
+	
 	# get input
 	if Input.is_action_pressed("move_down"):
 		input.y += 1
@@ -42,11 +46,13 @@ func _process(delta):
 		input *= speed * delta * 250
 		
 	
-	get_node("CharacterBody2D").velocity += input
-	if sliding:
-		get_node("CharacterBody2D").velocity = get_node("CharacterBody2D").velocity.limit_length(300.0)
-	#print(get_node("CharacterBody2D").velocity.length())
+	# add velocity to input
+	$CharacterBody2D.velocity += input
+	
+	#limit sliding velocity
+	$CharacterBody2D.velocity = get_node("CharacterBody2D").velocity.limit_length(300.0)
 
+	# if shifting slide
 	if Input.is_action_pressed("shift") && slidingTimer > 0 && !slidingDepleted:
 		sliding = true;
 	elif Input.is_action_pressed("shift") && slidingTimer > 250:
@@ -55,24 +61,25 @@ func _process(delta):
 	else:
 		sliding = false
 	
+	# if slidingTimer is depleted stop
 	if slidingTimer <= 0:
 		sliding = false
 		slidingDepleted = true
-		
-		
-	if get_node("CharacterBody2D").velocity.length() <= 20:
+	
+	# if speed is less than 20, stop sliding
+	if $CharacterBody2D.velocity.length() <= 20:
 		sliding = false
 		
+	# collide if sliding
 	if sliding:
-		var collisionInfo = get_node("CharacterBody2D").move_and_collide(get_node("CharacterBody2D").velocity * delta)
+		var collisionInfo = $CharacterBody2D.move_and_collide($CharacterBody2D.velocity * delta)
 		slidingTimer -= delta * 100
 		
 		if collisionInfo:
-			get_node("CharacterBody2D").velocity = get_node("CharacterBody2D").velocity.bounce(collisionInfo.get_normal())
-			get_node("CharacterBody2D").velocity -= Vector2(100 * delta, 100 * delta)
-	
+			$CharacterBody2D.velocity = $CharacterBody2D.velocity.bounce(collisionInfo.get_normal())
+			$CharacterBody2D.velocity -= Vector2(100 * delta, 100 * delta)
 	else:
-		get_node("CharacterBody2D").move_and_slide()
+		$CharacterBody2D.move_and_slide()
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
 
