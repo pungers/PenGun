@@ -15,6 +15,21 @@ func _ready():
 func _process(delta):
 	var input = Vector2(0, 0)
 	
+	var mousePos = get_viewport().get_mouse_position()
+	# center mouse position
+	mousePos.x -= get_viewport().size.x / 2
+	mousePos.y -= get_viewport().size.y / 2
+	
+	var theta = atan(mousePos.y / mousePos.x)
+	var direction = mousePos.normalized()
+	
+	if mousePos.x < 0:
+		theta -= PI
+	$Weapon.rotation = theta
+
+	if Input.is_action_just_pressed("click"):
+		$Weapon.spawnBullet(direction)
+	
 	# if the character isnt sliding reset velocity
 	if !sliding:
 		velocity = Vector2(0,0)

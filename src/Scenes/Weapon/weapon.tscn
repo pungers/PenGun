@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://de3ebr6covwyp"]
+
+[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="1_67wbd"]
+[ext_resource type="Script" path="res://Scenes/Weapon/weapon.gd" id="1_ynfn6"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_ynfn6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(23, 0)
+scale = Vector2(0.1875, 0.11942)
+texture = ExtResource("1_67wbd")
+
+[node name="BulletSpawn" type="Node2D" parent="."]
+position = Vector2(34, 0)
