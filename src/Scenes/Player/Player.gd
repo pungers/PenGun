@@ -33,7 +33,7 @@ func _process(delta):
 	# if the character isnt sliding reset velocity
 	if !sliding:
 		velocity = Vector2(0,0)
-	elif !(Input.is_action_pressed("move_down") || Input.is_action_pressed("move_up") || Input.is_action_pressed("move_right") || Input.is_action_pressed("move_left")):
+	#elif !(Input.is_action_pressed("move_down") || Input.is_action_pressed("move_up") || Input.is_action_pressed("move_right") || Input.is_action_pressed("move_left")):
 		#if user isnt inputting anything, move towards 0
 		velocity = velocity.move_toward(Vector2(0,0), delta * 3500)
 	

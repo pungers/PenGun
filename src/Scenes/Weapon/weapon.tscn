@@ -6,10 +6,12 @@
 [node name="Weapon" type="Node2D"]
 script = ExtResource("1_ynfn6")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(23, 0)
+[node name="WeaponSprite" type="Sprite2D" parent="."]
+position = Vector2(24, 0)
 scale = Vector2(0.1875, 0.11942)
 texture = ExtResource("1_67wbd")
+script = ExtResource("1_ynfn6")
 
-[node name="BulletSpawn" type="Node2D" parent="."]
-position = Vector2(34, 0)
+[node name="BulletSpawn" type="Node2D" parent="WeaponSprite"]
+position = Vector2(64, 0)
+scale = Vector2(1, 1)
