@@ -5,19 +5,22 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fy844"]
 
-[node name="Player" type="Node2D"]
-position = Vector2(52, 36)
+[node name="CharacterBody2D" type="CharacterBody2D"]
+scale = Vector2(1, 1)
+motion_mode = 1
 script = ExtResource("1_fxxlv")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-shape = SubResource("RectangleShape2D_fy844")
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
-position = Vector2(-3.8147e-06, -3.8147e-06)
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(52, 36)
 scale = Vector2(0.15625, 0.15625)
 texture = ExtResource("1_qrt1x")
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(52, 36)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_fy844")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(52, 36)
+scale = Vector2(1, 1)
 zoom = Vector2(2, 2)
