@@ -58,14 +58,21 @@ func _process(delta):
 	if sliding:
 		input *= speed * delta * 5
 	else:
-		input *= speed * delta * 250
+		input *= speed * delta * 200
+	
+	if sliding:
+		set_collision_layer_value(4, true)
+		set_collision_mask_value(4, true)
+	else:
+		set_collision_layer_value(4, false)
+		set_collision_mask_value(4, false)
 		
 	
 	# add velocity to input
 	velocity += input
 	
 	#limit sliding velocity
-	velocity = velocity.limit_length(300.0)
+	velocity = velocity.limit_length(350.0)
 
 	# if shifting slide
 	if Input.is_action_pressed("shift") && slidingTimer > 0 && !slidingDepleted:
