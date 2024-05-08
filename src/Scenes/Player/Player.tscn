@@ -6,7 +6,6 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fy844"]
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
-scale = Vector2(1, 1)
 motion_mode = 1
 script = ExtResource("1_fxxlv")
 
@@ -17,10 +16,8 @@ texture = ExtResource("1_qrt1x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(52, 36)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_fy844")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(52, 36)
-scale = Vector2(1, 1)
 zoom = Vector2(2, 2)

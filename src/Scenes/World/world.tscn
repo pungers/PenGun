@@ -1,13 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5koh40cwj0w0"]
+[gd_scene load_steps=4 format=3 uid="uid://b5koh40cwj0w0"]
 
 [ext_resource type="PackedScene" uid="uid://csee4gnihxo0s" path="res://Scenes/Player/Player.tscn" id="1_3iptj"]
 [ext_resource type="PackedScene" uid="uid://qgfg7flvbl51" path="res://Scenes/World/map.tscn" id="2_7jtfy"]
-[ext_resource type="PackedScene" uid="uid://cxt72iw37p12x" path="res://Scenes/UI/ui.tscn" id="3_givme"]
-[ext_resource type="Script" path="res://Scenes/UI/ui.gd" id="4_boe6i"]
 
 [sub_resource type="GDScript" id="GDScript_kktfq"]
 script/source = "extends Node2D
-
+signal slidingTimerSignal
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +16,11 @@ func _ready():
 func _process(delta):
 	pass
 
+
+
+func _on_player_sliding_timer_signal(slidingTimer):
+	emit_signal(\"slidingTimerSignal\", slidingTimer)
+	pass # Replace with function body.
 "
 
 [node name="World" type="Node2D"]
@@ -27,5 +30,4 @@ script = SubResource("GDScript_kktfq")
 
 [node name="Map" parent="." instance=ExtResource("2_7jtfy")]
 
-[node name="UI" parent="." instance=ExtResource("3_givme")]
-script = ExtResource("4_boe6i")
+[connection signal="slidingTimerSignal" from="Player" to="." method="_on_player_sliding_timer_signal"]

@@ -1,13 +1,39 @@
-[gd_scene format=3 uid="uid://cxt72iw37p12x"]
+[gd_scene load_steps=3 format=3 uid="uid://cxt72iw37p12x"]
 
-[node name="UI" type="Node2D"]
+[ext_resource type="PackedScene" uid="uid://b5koh40cwj0w0" path="res://Scenes/World/world.tscn" id="1_phlje"]
+[ext_resource type="Script" path="res://Scenes/UI/ProgressBar.gd" id="2_jpxxf"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="World" parent="Control" instance=ExtResource("1_phlje")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayer"]
-offset_top = 606.0
-offset_right = 1149.0
-offset_bottom = 647.0
+anchors_preset = -1
+anchor_top = 0.968
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.264038
+size_flags_horizontal = 3
+size_flags_vertical = 2
 max_value = 1000.0
 value = 1000.0
 show_percentage = false
+script = ExtResource("2_jpxxf")
+
+[connection signal="slidingTimerSignal" from="Control/World" to="CanvasLayer/ProgressBar" method="_on_world_sliding_timer_signal"]
