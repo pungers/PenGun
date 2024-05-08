@@ -1,7 +1,7 @@
 class_name Weapon
 extends Node2D
 
-const WEAPON_SPEED = 20
+const BULLET_SPEED = 500
 @onready var bulletObj = preload("res://Scenes/Bullet/bullet.tscn")
 
 # Called when the node enters the scene tree for the first time.
@@ -10,7 +10,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 func spawnBullet(direction):
@@ -19,7 +19,7 @@ func spawnBullet(direction):
 	bullet.position.y = $WeaponSprite/BulletSpawn.global_position.y
 	bullet.scale.y = 0.1
 	bullet.scale.x = 0.1
-	bullet.direction = direction * WEAPON_SPEED
+	bullet.direction = direction * BULLET_SPEED
 	get_tree().get_root().add_child(bullet)
 	
 	pass

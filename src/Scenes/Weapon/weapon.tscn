@@ -14,4 +14,3 @@ script = ExtResource("1_ynfn6")
 
 [node name="BulletSpawn" type="Node2D" parent="WeaponSprite"]
 position = Vector2(64, 0)
-scale = Vector2(1, 1)

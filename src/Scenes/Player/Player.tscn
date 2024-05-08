@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://csee4gnihxo0s"]
+[gd_scene load_steps=6 format=3 uid="uid://csee4gnihxo0s"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1_fxxlv"]
 [ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="1_qrt1x"]
 [ext_resource type="PackedScene" uid="uid://de3ebr6covwyp" path="res://Scenes/Weapon/weapon.tscn" id="3_2ewt4"]
+[ext_resource type="Script" path="res://Scenes/Hurtbox.gd" id="4_2a0cv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fy844"]
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
+collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_fxxlv")
 
@@ -21,3 +23,14 @@ shape = SubResource("RectangleShape2D_fy844")
 zoom = Vector2(3, 3)
 
 [node name="Weapon" parent="." instance=ExtResource("3_2ewt4")]
+scale = Vector2(1, 0.958521)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("4_2a0cv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_fy844")
+
+[connection signal="area_entered" from="Hurtbox" to="Hurtbox" method="_on_area_entered"]
