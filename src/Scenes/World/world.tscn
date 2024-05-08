@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5koh40cwj0w0"]
+[gd_scene load_steps=6 format=3 uid="uid://b5koh40cwj0w0"]
 
 [ext_resource type="PackedScene" uid="uid://csee4gnihxo0s" path="res://Scenes/Player/Player.tscn" id="1_3iptj"]
 [ext_resource type="PackedScene" uid="uid://qgfg7flvbl51" path="res://Scenes/World/map.tscn" id="2_7jtfy"]
+[ext_resource type="Script" path="res://Scenes/World/fps.gd" id="2_l2yog"]
 [ext_resource type="PackedScene" uid="uid://bo5n6r3ayio58" path="res://Scenes/Enemy/enemy.tscn" id="3_0hr8t"]
 
 [sub_resource type="GDScript" id="GDScript_kktfq"]
@@ -28,6 +29,13 @@ func _on_player_sliding_timer_signal(slidingTimer):
 script = SubResource("GDScript_kktfq")
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_3iptj")]
+
+[node name="fps" type="Label" parent="Player"]
+offset_left = -191.0
+offset_top = -108.0
+offset_right = -151.0
+offset_bottom = -85.0
+script = ExtResource("2_l2yog")
 
 [node name="Map" parent="." instance=ExtResource("2_7jtfy")]
 
