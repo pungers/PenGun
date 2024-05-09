@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5koh40cwj0w0"]
+[gd_scene load_steps=6 format=3 uid="uid://b5koh40cwj0w0"]
 
 [ext_resource type="PackedScene" uid="uid://csee4gnihxo0s" path="res://Scenes/Player/Player.tscn" id="1_3iptj"]
 [ext_resource type="PackedScene" uid="uid://qgfg7flvbl51" path="res://Scenes/World/map.tscn" id="2_7jtfy"]
-[ext_resource type="Script" path="res://Scenes/World/fps.gd" id="2_l2yog"]
 [ext_resource type="PackedScene" uid="uid://bo5n6r3ayio58" path="res://Scenes/Enemy/enemy.tscn" id="3_0hr8t"]
 [ext_resource type="PackedScene" uid="uid://d1mi2tx58cox4" path="res://Scenes/Enemy/smartEnemy/smartEnemy.tscn" id="4_dtvgl"]
 
@@ -51,22 +50,32 @@ func _on_player_sliding_timer_signal(slidingTimer):
 script = SubResource("GDScript_kktfq")
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_3iptj")]
-
-[node name="fps" type="Label" parent="Player"]
-offset_left = -191.0
-offset_top = -108.0
-offset_right = -151.0
-offset_bottom = -85.0
-script = ExtResource("2_l2yog")
+position = Vector2(50, 50)
 
 [node name="Map" parent="." instance=ExtResource("2_7jtfy")]
 
 [node name="Enemy" parent="." instance=ExtResource("3_0hr8t")]
-position = Vector2(160, 61)
+position = Vector2(350, 108)
 scale = Vector2(0.154621, 0.154621)
 
 [node name="smartEnemy" parent="." instance=ExtResource("4_dtvgl")]
-position = Vector2(110, -61)
+position = Vector2(314, 119)
+scale = Vector2(0.155, 0.155)
+
+[node name="smartEnemy2" parent="." instance=ExtResource("4_dtvgl")]
+position = Vector2(350, 133)
+scale = Vector2(0.155, 0.155)
+
+[node name="smartEnemy3" parent="." instance=ExtResource("4_dtvgl")]
+position = Vector2(379, 144)
+scale = Vector2(0.155, 0.155)
+
+[node name="smartEnemy4" parent="." instance=ExtResource("4_dtvgl")]
+position = Vector2(381, 118)
+scale = Vector2(0.155, 0.155)
+
+[node name="smartEnemy5" parent="." instance=ExtResource("4_dtvgl")]
+position = Vector2(382, 91)
 scale = Vector2(0.155, 0.155)
 
 [connection signal="slidingTimerSignal" from="Player" to="." method="_on_player_sliding_timer_signal"]

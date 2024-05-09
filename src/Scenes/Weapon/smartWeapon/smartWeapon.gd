@@ -41,8 +41,6 @@ func spawnBullet(direction):
 	bullet.direction = calculateDirection(bullet) * BULLET_SPEED
 	get_tree().get_root().add_child(bullet)
 	
-	print(bullet.direction)
-	
 	pass
 	
 func calculateDirection(bullet):

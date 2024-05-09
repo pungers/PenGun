@@ -17,16 +17,25 @@ func _process(delta):
 	
 	var mousePos = get_viewport().get_mouse_position()
 	# center mouse position
-	mousePos.x -= get_viewport().size.x / 2
-	mousePos.y -= get_viewport().size.y / 2
+	#mousePos.x -= get_viewport().size.x / 2
+	#mousePos.y -= get_viewport().size.y / 2
+	mousePos -= position
 	
 	var theta = atan(mousePos.y / mousePos.x)
 	var direction = mousePos.normalized()
 	
+	if sliding:
+		var phi = atan(velocity.y / velocity.x)
+		if velocity.x < 0:
+			phi -= PI
+		global_rotation = phi
+	else:
+		global_rotation = 0
+
 	if mousePos.x < 0:
 		theta -= PI
-	$Weapon.rotation = theta
-
+	$Weapon.global_rotation = theta
+	
 	if Input.is_action_just_pressed("click"):
 		$Weapon.spawnBullet(direction)
 	
@@ -35,7 +44,7 @@ func _process(delta):
 		velocity = Vector2(0,0)
 	#elif !(Input.is_action_pressed("move_down") || Input.is_action_pressed("move_up") || Input.is_action_pressed("move_right") || Input.is_action_pressed("move_left")):
 		#if user isnt inputting anything, move towards 0
-		velocity = velocity.move_toward(Vector2(0,0), delta * 3500)
+	velocity = velocity.move_toward(Vector2(0,0), 1)
 	
 	# emit singal to UI
 	emit_signal("slidingTimerSignal", slidingTimer)
@@ -104,7 +113,8 @@ func _process(delta):
 		
 		if collisionInfo:
 			velocity = velocity.bounce(collisionInfo.get_normal())
-			velocity -= Vector2(100 * delta, 100 * delta)
+			#velocity *= Vector2(100, 100)
+			collisionInfo.get_collider().set("velocity", velocity * -1 * .5)
 	else:
 		move_and_slide()
 		slidingTimer += delta * 500

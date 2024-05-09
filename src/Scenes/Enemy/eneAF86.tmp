@@ -1,32 +1,30 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1mi2tx58cox4"]
+[gd_scene load_steps=6 format=3 uid="uid://bo5n6r3ayio58"]
 
-[ext_resource type="Script" path="res://Scenes/Enemy/smartEnemy/smartEnemy.gd" id="1_ymq63"]
-[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_w28ix"]
-[ext_resource type="PackedScene" uid="uid://ttrx35bw42qs" path="res://Scenes/Weapon/smartWeapon/smartWeapon.tscn" id="3_xlseh"]
-[ext_resource type="Script" path="res://Scenes/Hurtbox.gd" id="4_eri14"]
+[ext_resource type="Script" path="res://Scenes/Enemy/enemy.gd" id="1_861bi"]
+[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_lkydp"]
+[ext_resource type="PackedScene" uid="uid://de3ebr6covwyp" path="res://Scenes/Weapon/weapon.tscn" id="3_tl2wp"]
+[ext_resource type="Script" path="res://Scenes/Hurtbox.gd" id="4_wi6b5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jgs4s"]
 size = Vector2(128, 128)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
-collision_layer = 8
-collision_mask = 9
-script = ExtResource("1_ymq63")
+script = ExtResource("1_861bi")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_w28ix")
+texture = ExtResource("2_lkydp")
 
-[node name="smartWeapon" parent="." instance=ExtResource("3_xlseh")]
+[node name="Weapon" parent="." instance=ExtResource("3_tl2wp")]
 scale = Vector2(3, 3)
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 4
 collision_mask = 2
 collision_priority = 2.0
-script = ExtResource("4_eri14")
+script = ExtResource("4_wi6b5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 shape = SubResource("RectangleShape2D_jgs4s")
