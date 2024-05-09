@@ -10,6 +10,7 @@ func _ready():
 func _process(_delta):
 	pass
 
-func _on_area_entered(_hurtbox: Hurtbox):
-	queue_free()
+func _on_area_entered(hurtbox: Hurtbox):
+	if !hurtbox.get_parent().is_in_group(get_groups()[0]):
+		queue_free()
 	pass # Replace with function body.

@@ -54,27 +54,27 @@ position = Vector2(50, 50)
 
 [node name="Map" parent="." instance=ExtResource("2_7jtfy")]
 
-[node name="Enemy" parent="." instance=ExtResource("3_0hr8t")]
+[node name="Enemy" parent="." groups=["Enemy"] instance=ExtResource("3_0hr8t")]
 position = Vector2(350, 108)
 scale = Vector2(0.154621, 0.154621)
 
-[node name="smartEnemy" parent="." instance=ExtResource("4_dtvgl")]
+[node name="smartEnemy" parent="." groups=["Enemy"] instance=ExtResource("4_dtvgl")]
 position = Vector2(314, 119)
 scale = Vector2(0.155, 0.155)
 
-[node name="smartEnemy2" parent="." instance=ExtResource("4_dtvgl")]
+[node name="smartEnemy2" parent="." groups=["Enemy"] instance=ExtResource("4_dtvgl")]
 position = Vector2(350, 133)
 scale = Vector2(0.155, 0.155)
 
-[node name="smartEnemy3" parent="." instance=ExtResource("4_dtvgl")]
+[node name="smartEnemy3" parent="." groups=["Enemy"] instance=ExtResource("4_dtvgl")]
 position = Vector2(379, 144)
 scale = Vector2(0.155, 0.155)
 
-[node name="smartEnemy4" parent="." instance=ExtResource("4_dtvgl")]
+[node name="smartEnemy4" parent="." groups=["Enemy"] instance=ExtResource("4_dtvgl")]
 position = Vector2(381, 118)
 scale = Vector2(0.155, 0.155)
 
-[node name="smartEnemy5" parent="." instance=ExtResource("4_dtvgl")]
+[node name="smartEnemy5" parent="." groups=["Enemy"] instance=ExtResource("4_dtvgl")]
 position = Vector2(382, 91)
 scale = Vector2(0.155, 0.155)
 

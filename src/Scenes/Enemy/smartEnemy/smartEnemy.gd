@@ -2,11 +2,14 @@ extends Enemy
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	hp = 100
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if (hp <= 0): 
+		queue_free()
 	var distance = player.global_position - global_position
 	
 	var theta = atan(distance.y / distance.x)
@@ -23,7 +26,7 @@ func _process(delta):
 		collisionInfo.get_collider().set("velocity", velocity * -1 * .5)
 		
 	rotateTo(theta)
-	velocity = velocity.move_toward(Vector2(0,0), .75   )
+	velocity = velocity.move_toward(Vector2(0,0), .75)
 	pass
 
 func rotateTo(angle):
@@ -32,6 +35,6 @@ func rotateTo(angle):
 	pass
 
 func _on_timer_timeout():
-	$smartWeapon.spawnBullet(direction)
+	$smartWeapon.spawnBullet(direction, "Enemy")
 	#$Weapon2.spawnBullet(-direction)
 	pass # Replace with function body.

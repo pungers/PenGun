@@ -13,8 +13,9 @@ func _ready():
 func _process(_delta):
 	pass
 
-func spawnBullet(direction):
+func spawnBullet(direction, group):
 	var bullet = bulletObj.instantiate()
+	bullet.add_to_group(group)
 	bullet.position.x = $WeaponSprite/BulletSpawn.global_position.x
 	bullet.position.y = $WeaponSprite/BulletSpawn.global_position.y
 	bullet.scale.y = 0.1

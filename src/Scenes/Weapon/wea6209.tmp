@@ -1,14 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://de3ebr6covwyp"]
+[gd_scene load_steps=3 format=3 uid="uid://de3ebr6covwyp"]
 
 [ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="1_67wbd"]
-[ext_resource type="Script" path="res://Scenes/Weapon/weapon.gd" id="1_xq8r5"]
 
 [sub_resource type="GDScript" id="GDScript_v6ew6"]
-script/source = "#class_name Weapon
-extends Weapon
+script/source = "class_name Weapon
+extends Node2D
 
-#const BULLET_SPEED = 500
-#@onready var bulletObj = preload(\"res://Scenes/Bullet/bullet.tscn\")
+const BULLET_SPEED = 500
+@onready var bulletObj = preload(\"res://Scenes/Bullet/bullet.tscn\")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -33,7 +32,7 @@ func spawnBullet(direction, group):
 "
 
 [node name="Weapon" type="Node2D"]
-script = ExtResource("1_xq8r5")
+script = SubResource("GDScript_v6ew6")
 
 [node name="WeaponSprite" type="Sprite2D" parent="."]
 position = Vector2(24, 0)

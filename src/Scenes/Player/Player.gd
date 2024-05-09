@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Actor
 
 var speed = 100
 var sliding = false
@@ -8,11 +8,13 @@ var slidingTimer = 1000
 signal slidingTimerSignal
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	hp = 100
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	#print(hp)
 	var input = Vector2(0, 0)
 	
 	var mousePos = get_viewport().get_mouse_position()
@@ -37,7 +39,7 @@ func _process(delta):
 	$Weapon.global_rotation = theta
 	
 	if Input.is_action_just_pressed("click"):
-		$Weapon.spawnBullet(direction)
+		$Weapon.spawnBullet(direction, "Player")
 	
 	# if the character isnt sliding reset velocity
 	if !sliding:
@@ -114,8 +116,24 @@ func _process(delta):
 		if collisionInfo:
 			velocity = velocity.bounce(collisionInfo.get_normal())
 			#velocity *= Vector2(100, 100)
-			collisionInfo.get_collider().set("velocity", velocity * -1 * .5)
+			collisionInfo.get_collider().set("velocity", velocity * -1)
+			if collisionInfo.get_collider().is_in_group("Enemy"):
+				collisionInfo.get_collider().decreaseHp(10)
+				if velocity.length() > 300:
+					#smoothZoom(2)
+					#$Camera2D.zoom.move_toward(Vector2(2, 2), 100)
+					freezeFrame(0.05, 0.25)
+					#$Camera2D.zoom = Vector2(1.0, 1.0)
+
 	else:
 		move_and_slide()
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
+
+func freezeFrame(timescale, duration):
+	Engine.time_scale = timescale
+	await(get_tree().create_timer(duration * timescale).timeout)
+	Engine.time_scale = 1.0
+	
+func smoothZoom(float):
+	$Camera2D.zoom.move_toward(Vector2(2, 2), 1)
