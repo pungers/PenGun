@@ -62,12 +62,11 @@ func calculateDirection(bullet):
 	var b = d_y * bs
 	var c = d_x * bs
 	
+	a /= 1000
+	b /= 1000
+	c /= 1000
+	
 	var theta = 2 * atan( (c - sqrt( -1 * (a ** 2) + b ** 2 + c ** 2))/(a - b))
-	print(player.global_position.x, " ", player.global_position.y)
-	print(bullet.global_position.x, " ", bullet.global_position.y)
-	print(d_y, " ", d_x)
-	print(ps_x, " ", ps_y)
-	print(a, " ", b, " ", c, " ", theta)
-	print(Vector2(cos(theta), -1 * sin(theta)))
+	
 	
 	return Vector2(cos(theta), -1 * sin(theta))
