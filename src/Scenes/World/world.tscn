@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5koh40cwj0w0"]
+[gd_scene load_steps=7 format=3 uid="uid://b5koh40cwj0w0"]
 
 [ext_resource type="PackedScene" uid="uid://csee4gnihxo0s" path="res://Scenes/Player/Player.tscn" id="1_3iptj"]
 [ext_resource type="PackedScene" uid="uid://qgfg7flvbl51" path="res://Scenes/World/map.tscn" id="2_7jtfy"]
 [ext_resource type="Script" path="res://Scenes/World/fps.gd" id="2_l2yog"]
 [ext_resource type="PackedScene" uid="uid://bo5n6r3ayio58" path="res://Scenes/Enemy/enemy.tscn" id="3_0hr8t"]
+[ext_resource type="PackedScene" uid="uid://d1mi2tx58cox4" path="res://Scenes/Enemy/smartEnemy/smartEnemy.tscn" id="4_dtvgl"]
 
 [sub_resource type="GDScript" id="GDScript_kktfq"]
 script/source = "extends Node2D
@@ -18,7 +19,28 @@ func _ready():
 func _process(_delta):
 	pass
 
-
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_R:
+			print(\"r was pressed\")
+			
+			Engine.max_fps = 3
+			
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_T:
+			print(\"T was pressed\")
+			
+			Engine.max_fps = 60
+			
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_Y:
+			print(\"y was pressed\")
+			Engine.max_fps += 1
+			
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_U:
+			print(\"y was pressed\")
+			Engine.max_fps -= 1
 
 func _on_player_sliding_timer_signal(slidingTimer):
 	emit_signal(\"slidingTimerSignal\", slidingTimer)
@@ -42,5 +64,9 @@ script = ExtResource("2_l2yog")
 [node name="Enemy" parent="." instance=ExtResource("3_0hr8t")]
 position = Vector2(160, 61)
 scale = Vector2(0.154621, 0.154621)
+
+[node name="smartEnemy" parent="." instance=ExtResource("4_dtvgl")]
+position = Vector2(110, -61)
+scale = Vector2(0.155, 0.155)
 
 [connection signal="slidingTimerSignal" from="Player" to="." method="_on_player_sliding_timer_signal"]

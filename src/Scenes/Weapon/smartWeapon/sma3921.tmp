@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ttrx35bw42qs"]
+
+[ext_resource type="Script" path="res://Scenes/Weapon/smartWeapon/smartWeapon.gd" id="1_4bacd"]
+[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_kibum"]
+
+[node name="smartWeapon" type="Node2D"]
+script = ExtResource("1_4bacd")
+
+[node name="WeaponSprite" type="Sprite2D" parent="."]
+position = Vector2(24, 0)
+scale = Vector2(0.1875, 0.11942)
+texture = ExtResource("2_kibum")
+
+[node name="BulletSpawn" type="Node2D" parent="WeaponSprite"]
+position = Vector2(64, 0)

@@ -56,9 +56,14 @@ func _process(delta):
 	input = input.normalized()
 	
 	if sliding:
-		input *= speed * delta * 5
+		# removing the extra delta actually makes it feel a lot worse
+		# and that's because player input has too much influence 
+		input *= speed * .1
 	else:
-		input *= speed * delta * 200
+		# also you realize that before you were multipling speed by 200 right?
+		# 100 * 200 = really big number
+		input *= speed * 2
+		
 	
 	if sliding:
 		set_collision_layer_value(4, true)
@@ -104,5 +109,3 @@ func _process(delta):
 		move_and_slide()
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
-
-	pass
