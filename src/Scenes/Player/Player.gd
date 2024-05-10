@@ -162,16 +162,15 @@ func _process(delta):
 			if collisionInfo.get_collider().is_in_group("Enemy"):
 				collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames
-				if velocity.length() > 500:
-					print("hi")
-					freezeFrame(0.05, 0.5)
+				if velocity.length() > 450:
+					$Camera2D.zoom = Vector2(4, 4) * (velocity.length()) / 750
+					freezeFrame(0.05, velocity.length() / 750)
 	else:
 		move_and_slide()
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
 
 func freezeFrame(timescale, duration):
-	$Camera2D.zoom = Vector2(4, 4)
 	Engine.time_scale = timescale
 	var timer = get_tree().create_timer(duration * timescale)
 	await(timer.timeout)
