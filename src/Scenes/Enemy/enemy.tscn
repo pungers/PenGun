@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bo5n6r3ayio58"]
+[gd_scene load_steps=7 format=3 uid="uid://bo5n6r3ayio58"]
 
 [ext_resource type="Script" path="res://Scenes/Enemy/enemy.gd" id="1_861bi"]
 [ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_lkydp"]
 [ext_resource type="PackedScene" uid="uid://de3ebr6covwyp" path="res://Scenes/Weapon/weapon.tscn" id="3_tl2wp"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing_2d.gd" id="4_gcvev"]
 [ext_resource type="Script" path="res://Scenes/Hurtbox.gd" id="4_wi6b5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jgs4s"]
@@ -15,9 +16,6 @@ script = ExtResource("1_861bi")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_lkydp")
 
 [node name="Weapon" parent="." instance=ExtResource("3_tl2wp")]
 scale = Vector2(3, 3)
@@ -33,6 +31,12 @@ shape = SubResource("RectangleShape2D_jgs4s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_jgs4s")
+
+[node name="Smoothing2D" type="Node2D" parent="."]
+script = ExtResource("4_gcvev")
+
+[node name="Sprite2D" type="Sprite2D" parent="Smoothing2D"]
+texture = ExtResource("2_lkydp")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="Hurtbox" method="_on_area_entered"]

@@ -62,9 +62,6 @@ func _process(delta):
 		sliding = true
 		
 	if sliding:
-		velocity = velocity.move_toward(Vector2(0,0), delta)
-		
-	if sliding:
 		$Smoothing2D/Sprite2D.scale.x = (1.00 + velocity.length() / 1500) * 0.156
 		$Smoothing2D/Sprite2D.scale.y = (1.00 - velocity.length() / 1500) * 0.156
 	else:
@@ -80,7 +77,7 @@ func _process(delta):
 	
 	if boostTimer > 0 && !drifting:
 		boostTimer -= delta *  100
-	Engine.max_fps = 900
+	Engine.max_fps = 60
 	# get input
 	if Input.is_action_pressed("move_down"):
 		input.y += 1
@@ -105,24 +102,11 @@ func _process(delta):
 		inputSpeed *= speed * delta * 20
 	elif boostTimer <= 0:
 		inputSpeed *= speed * 2
-	
-	if sliding:
-		set_collision_layer_value(4, true)
-		set_collision_mask_value(4, true)
-	else:
-		set_collision_layer_value(4, false)
-		set_collision_mask_value(4, false)
+
 		
 	# add input to velocity
 	if !drifting:
 		velocity += inputSpeed
-
-	#limit sliding velocity
-	if boostTimer <= 0:
-		velocity = velocity.limit_length(350.0)
-	else:
-		print(350 + 1000 * boostTimer / 100)
-		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
 	
 	# if shifting slide
 	if Input.is_action_pressed("shift") && slidingTimer > 0 && !slidingDepleted:
@@ -155,13 +139,21 @@ func _process(delta):
 	boostTimer = clamp(boostTimer, 0, 100)
 
 func _physics_process(delta):
+		#limit sliding velocity
+	if boostTimer <= 0:
+		velocity = velocity.limit_length(350.0)
+	else:
+		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
+		
 	if sliding:
+		velocity = velocity.move_toward(Vector2(0,0), delta)
 		var collisionInfo = move_and_collide(velocity * delta)
 		slidingTimer -= delta * 100
 		
 		if collisionInfo:
+			print(velocity)
+			collisionInfo.get_collider().set("velocity", velocity * 0.5)
 			velocity = velocity.bounce(collisionInfo.get_normal())
-			collisionInfo.get_collider().set("velocity", velocity * -0.5)
 			if collisionInfo.get_collider().is_in_group("Enemy"):
 				#collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames
@@ -172,7 +164,6 @@ func _physics_process(delta):
 					freezeFrame(0.05, 0.35 * velocity.length() / 750)
 	else:
 		move_and_slide()
-		
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
 

@@ -26,7 +26,7 @@ func _process(delta):
 		collisionInfo.get_collider().set("velocity", velocity * -1 * .5)
 		
 	rotateTo(theta)
-	velocity = velocity.move_toward(Vector2(0,0), .75)
+	velocity = velocity.move_toward(Vector2(0,0), 125 * delta)
 	pass
 
 func rotateTo(angle):
