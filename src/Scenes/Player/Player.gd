@@ -19,6 +19,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#print(hp)
+	#sEngine.max_fps = 60
 	var input = Vector2(0, 0)
 	
 	#%Camera2D.global_position = lerp(%Camera2D.global_position, global_position, delta * .1)
@@ -77,7 +78,7 @@ func _process(delta):
 	
 	if boostTimer > 0 && !drifting:
 		boostTimer -= delta *  100
-	Engine.max_fps = 60
+
 	# get input
 	if Input.is_action_pressed("move_down"):
 		input.y += 1
@@ -103,9 +104,9 @@ func _process(delta):
 	elif boostTimer <= 0:
 		inputSpeed *= speed * 2
 
-		
 	# add input to velocity
-	if !drifting:
+	if boostTimer <= 0 && !drifting:
+		print("hi")
 		velocity += inputSpeed
 	
 	# if shifting slide
@@ -125,8 +126,9 @@ func _process(delta):
 		sliding = false
 		slidingDepleted = true
 	
-	if Input.is_action_pressed("rclick") && boostTimer <= 0 && slidingTimer >= 0 && sliding:
+	if Input.is_action_pressed("rclick") && boostTimer <= 0 && slidingTimer >= 250:
 		drifting = true
+		sliding = true
 	
 	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
 		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
@@ -137,6 +139,8 @@ func _process(delta):
 	#	move_and_slide()
 	
 	boostTimer = clamp(boostTimer, 0, 100)
+func _input(event):
+	pass
 
 func _physics_process(delta):
 		#limit sliding velocity
@@ -146,7 +150,7 @@ func _physics_process(delta):
 		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
 		
 	if sliding:
-		velocity = velocity.move_toward(Vector2(0,0), delta)
+		velocity = velocity.move_toward(Vector2(0,0), delta * 125)
 		var collisionInfo = move_and_collide(velocity * delta)
 		slidingTimer -= delta * 100
 		
@@ -154,6 +158,7 @@ func _physics_process(delta):
 			print(velocity)
 			collisionInfo.get_collider().set("velocity", velocity * 0.5)
 			velocity = velocity.bounce(collisionInfo.get_normal())
+			velocity *= 1.25
 			if collisionInfo.get_collider().is_in_group("Enemy"):
 				#collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames
@@ -161,7 +166,7 @@ func _physics_process(delta):
 					emit_signal("camZoom", Vector2(3, 3) * (velocity.length()) / 750)
 					freezeFrame(0.05, 0.75 * velocity.length() / 750)
 				else:
-					freezeFrame(0.05, 0.35 * velocity.length() / 750)
+					freezeFrame(0.05, 0.1 * velocity.length() / 500)
 	else:
 		move_and_slide()
 		slidingTimer += delta * 500
