@@ -7,7 +7,9 @@ var slidingDepleted = false
 var slidingTimer = 1000
 var boostTimer = 0
 
+signal camZoom
 signal slidingTimerSignal
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	hp = 100
@@ -19,10 +21,13 @@ func _process(delta):
 	#print(hp)
 	var input = Vector2(0, 0)
 	
+	#%Camera2D.global_position = lerp(%Camera2D.global_position, global_position, delta * .1)
 	var mousePos = get_viewport().get_mouse_position()
 	# center mouse position
 	mousePos.x -= get_viewport().size.x / 2
 	mousePos.y -= get_viewport().size.y / 2
+	mousePos += global_position - get_parent().get_node("Camera2D").global_position
+	#print(get_parent().get_node("Camera2D").global_position - position)
 	
 	var theta = atan(mousePos.y / mousePos.x)
 	var direction = mousePos.normalized()
@@ -39,7 +44,7 @@ func _process(delta):
 			phi -= PI
 		global_rotation = phi
 	else:
-		global_rotation = 0
+		global_rotation -= (global_rotation) * delta * 5
 	$Weapon.global_rotation = theta
 	if drifting:
 		$Arrow.scale.x = boostTimer/100.0
@@ -55,14 +60,27 @@ func _process(delta):
 		velocity = Vector2(0,0)
 	elif boostTimer > 0:
 		sliding = true
-		velocity = velocity.move_toward(Vector2(0,0), 1)
+		
+	if sliding:
+		velocity = velocity.move_toward(Vector2(0,0), delta)
+		
+	if sliding:
+		$Smoothing2D/Sprite2D.scale.x = (1.00 + velocity.length() / 1500) * 0.156
+		$Smoothing2D/Sprite2D.scale.y = (1.00 - velocity.length() / 1500) * 0.156
+	else:
+		if ($Smoothing2D/Sprite2D.scale.x > 0.156):
+			$Smoothing2D/Sprite2D.scale.x -= ($Smoothing2D/Sprite2D.scale.x - 0.156) * delta * 5
+			clamp($Smoothing2D/Sprite2D.scale.x, 0.156, $Smoothing2D/Sprite2D.scale.x)
+		if ($Smoothing2D/Sprite2D.scale.y < 0.156):
+			$Smoothing2D/Sprite2D.scale.y -= ($Smoothing2D/Sprite2D.scale.y - 0.156) * delta * 5
+			clamp($Smoothing2D/Sprite2D.scale.y, $Smoothing2D/Sprite2D.scale.y, 0.156)
 
 	# emit singal to UI
 	emit_signal("slidingTimerSignal", slidingTimer)
 	
 	if boostTimer > 0 && !drifting:
-		boostTimer -= delta * 100
-	
+		boostTimer -= delta *  100
+	Engine.max_fps = 900
 	# get input
 	if Input.is_action_pressed("move_down"):
 		input.y += 1
@@ -81,13 +99,12 @@ func _process(delta):
 	if drifting:
 		slidingTimer -= delta * 75
 		boostTimer += 50 * delta
-		velocity *= .9925
+		velocity = lerp(velocity, Vector2(0, 0), delta * 2)
 		#input = input.cross(velocity) 
 	elif sliding && boostTimer <= 0:
-		inputSpeed *= speed * .1
+		inputSpeed *= speed * delta * 20
 	elif boostTimer <= 0:
 		inputSpeed *= speed * 2
-		
 	
 	if sliding:
 		set_collision_layer_value(4, true)
@@ -96,7 +113,6 @@ func _process(delta):
 		set_collision_layer_value(4, false)
 		set_collision_mask_value(4, false)
 		
-	
 	# add input to velocity
 	if !drifting:
 		velocity += inputSpeed
@@ -105,6 +121,7 @@ func _process(delta):
 	if boostTimer <= 0:
 		velocity = velocity.limit_length(350.0)
 	else:
+		print(350 + 1000 * boostTimer / 100)
 		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
 	
 	# if shifting slide
@@ -130,15 +147,14 @@ func _process(delta):
 	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
 		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
 		drifting = false
-	
-	if $Camera2D.zoom > Vector2(2, 2):
-		$Camera2D.zoom -= Vector2(delta * 3 * ($Camera2D.zoom.x - 2), delta * 3 * ($Camera2D.zoom.y - 2))
-	elif $Camera2D.zoom < Vector2(2,2):
-		$Camera2D.zoom = Vector2(2,2)
 		
 	# collide if sliding
 	#if drifting:
 	#	move_and_slide()
+	
+	boostTimer = clamp(boostTimer, 0, 100)
+
+func _physics_process(delta):
 	if sliding:
 		var collisionInfo = move_and_collide(velocity * delta)
 		slidingTimer -= delta * 100
@@ -149,19 +165,20 @@ func _process(delta):
 			if collisionInfo.get_collider().is_in_group("Enemy"):
 				#collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames
-				if velocity.length() > 450:
-					$Camera2D.zoom = Vector2(4, 4) * (velocity.length()) / 750
-					freezeFrame(0.05, velocity.length() / 750)
+				if velocity.length() > 500:
+					emit_signal("camZoom", Vector2(3, 3) * (velocity.length()) / 750)
+					freezeFrame(0.05, 0.75 * velocity.length() / 750)
+				else:
+					freezeFrame(0.05, 0.35 * velocity.length() / 750)
 	else:
 		move_and_slide()
+		
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
-	
-	boostTimer = clamp(boostTimer, 0, 100)
 
 func freezeFrame(timescale, duration):
 	Engine.time_scale = timescale
 	var timer = get_tree().create_timer(duration * timescale)
 	await(timer.timeout)
 	Engine.time_scale = 1.0
-	
+

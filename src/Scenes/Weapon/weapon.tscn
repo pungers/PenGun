@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://de3ebr6covwyp"]
+[gd_scene load_steps=5 format=3 uid="uid://de3ebr6covwyp"]
 
 [ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="1_67wbd"]
 [ext_resource type="Script" path="res://Scenes/Weapon/weapon.gd" id="1_xq8r5"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing_2d.gd" id="2_gkqq3"]
 
 [sub_resource type="GDScript" id="GDScript_v6ew6"]
 script/source = "#class_name Weapon
@@ -35,11 +36,15 @@ func spawnBullet(direction, group):
 [node name="Weapon" type="Node2D"]
 script = ExtResource("1_xq8r5")
 
-[node name="WeaponSprite" type="Sprite2D" parent="."]
-position = Vector2(24, 0)
-scale = Vector2(0.1875, 0.11942)
+[node name="Smoothing2D" type="Node2D" parent="."]
+script = ExtResource("2_gkqq3")
+
+[node name="WeaponSprite" type="Sprite2D" parent="Smoothing2D"]
+position = Vector2(21.155, 0)
+scale = Vector2(0.225, 0.035)
 texture = ExtResource("1_67wbd")
 script = SubResource("GDScript_v6ew6")
 
-[node name="BulletSpawn" type="Node2D" parent="WeaponSprite"]
-position = Vector2(64, 0)
+[node name="BulletSpawn" type="Node2D" parent="."]
+position = Vector2(36, 0)
+scale = Vector2(0.1875, 0.11942)

@@ -16,6 +16,14 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 run/max_fps=1000
 config/icon="res://icon.svg"
 
+[display]
+
+window/vsync/vsync_mode=0
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/smoothing/plugin.cfg")
+
 [input]
 
 move_up={
