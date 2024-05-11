@@ -79,12 +79,13 @@ func _process(delta):
 	var inputSpeed = input.normalized()
 	
 	if drifting:
+		slidingTimer -= delta * 75
 		boostTimer += 50 * delta
 		velocity *= .9925
 		#input = input.cross(velocity) 
-	elif sliding:
+	elif sliding && boostTimer <= 0:
 		inputSpeed *= speed * .1
-	else:
+	elif boostTimer <= 0:
 		inputSpeed *= speed * 2
 		
 	
@@ -99,7 +100,7 @@ func _process(delta):
 	# add input to velocity
 	if !drifting:
 		velocity += inputSpeed
-	
+
 	#limit sliding velocity
 	if boostTimer <= 0:
 		velocity = velocity.limit_length(350.0)
@@ -128,7 +129,6 @@ func _process(delta):
 	
 	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
 		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
-		slidingTimer -= 100
 		drifting = false
 	
 	if $Camera2D.zoom > Vector2(2, 2):
@@ -147,7 +147,7 @@ func _process(delta):
 			velocity = velocity.bounce(collisionInfo.get_normal())
 			collisionInfo.get_collider().set("velocity", velocity * -0.5)
 			if collisionInfo.get_collider().is_in_group("Enemy"):
-				collisionInfo.get_collider().decreaseHp(10)
+				#collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames
 				if velocity.length() > 450:
 					$Camera2D.zoom = Vector2(4, 4) * (velocity.length()) / 750
