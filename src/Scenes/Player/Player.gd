@@ -106,14 +106,6 @@ func _process(delta):
 	else:
 		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
 	
-	if Input.is_action_pressed("rclick") && boostTimer <= 0 && slidingTimer >= 0:
-		drifting = true
-	
-	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
-		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
-		slidingTimer -= 100
-		drifting = false
-	
 	# if shifting slide
 	if Input.is_action_pressed("shift") && slidingTimer > 0 && !slidingDepleted:
 		sliding = true;
@@ -122,16 +114,23 @@ func _process(delta):
 		slidingDepleted = false;
 	elif boostTimer == 0:
 		sliding = false
-		
+	
+	# if speed is less than 20, stop sliding
+	if velocity.length() <= 20 && boostTimer <= 0:
+		sliding = false
 	# if slidingTimer is depleted stop
 	if slidingTimer <= 0 && boostTimer <= 0:
 		sliding = false
 		slidingDepleted = true
 	
-	# if speed is less than 20, stop sliding
-	if velocity.length() <= 20 && boostTimer <= 0:
-		sliding = false
-		
+	if Input.is_action_pressed("rclick") && boostTimer <= 0 && slidingTimer >= 0 && sliding:
+		drifting = true
+	
+	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
+		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
+		slidingTimer -= 100
+		drifting = false
+	
 	if $Camera2D.zoom > Vector2(2, 2):
 		$Camera2D.zoom -= Vector2(delta * 3 * ($Camera2D.zoom.x - 2), delta * 3 * ($Camera2D.zoom.y - 2))
 	elif $Camera2D.zoom < Vector2(2,2):
