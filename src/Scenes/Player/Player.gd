@@ -5,7 +5,6 @@ var sliding = false
 var drifting = false
 var slidingDepleted = false
 var slidingTimer = 1000
-var driftingTimer = 0
 var boostTimer = 0
 
 signal slidingTimerSignal
@@ -63,8 +62,6 @@ func _process(delta):
 	
 	if boostTimer > 0 && !drifting:
 		boostTimer -= delta * 100
-	elif boostTimer <= 0 && !drifting:
-		boostTimer = 0
 	
 	# get input
 	if Input.is_action_pressed("move_down"):
@@ -82,10 +79,7 @@ func _process(delta):
 	var inputSpeed = input.normalized()
 	
 	if drifting:
-		if boostTimer < 100:
-			boostTimer += 50 * delta
-		if boostTimer > 100:
-			boostTimer = 100
+		boostTimer += 50 * delta
 		velocity *= .9925
 		#input = input.cross(velocity) 
 	elif sliding:
@@ -112,31 +106,25 @@ func _process(delta):
 	else:
 		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
 	
-	if sliding && Input.is_action_just_released("shift") && boostTimer <= 0:
-		driftingTimer = 2
-	
-	if driftingTimer > 0:
-		driftingTimer -= delta * 10
-	elif driftingTimer < 0:
-		driftingTimer = 0
-	if driftingTimer > 0 && Input.is_action_pressed("shift"):
-		driftingTimer = 0
+	if Input.is_action_pressed("rclick") && boostTimer <= 0 && slidingTimer >= 0:
 		drifting = true
 	
-	if drifting && Input.is_action_just_released("shift"):
+	if (Input.is_action_just_released("rclick") || slidingTimer <= 0) && drifting:
 		velocity = mousePos.normalized() * (350 + 350 * boostTimer / 100)
+		slidingTimer -= 100
 		drifting = false
+	
 	# if shifting slide
 	if Input.is_action_pressed("shift") && slidingTimer > 0 && !slidingDepleted:
 		sliding = true;
 	elif Input.is_action_pressed("shift") && slidingTimer > 250:
 		sliding = true
 		slidingDepleted = false;
-	elif driftingTimer == 0 && boostTimer == 0:
+	elif boostTimer == 0:
 		sliding = false
 		
 	# if slidingTimer is depleted stop
-	if slidingTimer <= 0:
+	if slidingTimer <= 0 && boostTimer <= 0:
 		sliding = false
 		slidingDepleted = true
 	
@@ -169,6 +157,8 @@ func _process(delta):
 		move_and_slide()
 		slidingTimer += delta * 500
 		slidingTimer = clamp(slidingTimer, 0, 1000)
+	
+	boostTimer = clamp(boostTimer, 0, 100)
 
 func freezeFrame(timescale, duration):
 	Engine.time_scale = timescale
