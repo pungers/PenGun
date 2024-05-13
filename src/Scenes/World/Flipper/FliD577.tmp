@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_1l2yg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rserd"]
-size = Vector2(36.1818, 2)
+size = Vector2(36, 2)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_ufbj6")
@@ -14,7 +14,7 @@ script = ExtResource("1_ufbj6")
 position = Vector2(48.695, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-position = Vector2(0, -1)
+position = Vector2(0, 1)
 scale = Vector2(2.695, 1)
 shape = SubResource("RectangleShape2D_rserd")
 
@@ -32,7 +32,7 @@ texture = ExtResource("2_1l2yg")
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(48.755, 1)
+position = Vector2(49, -1)
 scale = Vector2(2.695, 1)
 shape = SubResource("RectangleShape2D_rserd")
 

@@ -46,6 +46,7 @@ func _process(delta):
 		global_rotation = phi
 	else:
 		global_rotation -= (global_rotation) * delta * 5
+		
 	$Weapon.global_rotation = theta
 	if drifting:
 		$Arrow.scale.x = boostTimer/100.0
@@ -63,15 +64,10 @@ func _process(delta):
 		sliding = true
 		
 	if sliding:
-		$Smoothing2D/Sprite2D.scale.x = (1.00 + velocity.length() / 1500) * 0.156
-		$Smoothing2D/Sprite2D.scale.y = (1.00 - velocity.length() / 1500) * 0.156
+		$Smoothing2D/Sprite2D.scale.x = lerp($Smoothing2D/Sprite2D.scale.x, (1.00 + velocity.length() / 1000) * 0.156, delta * 5)
+		$Smoothing2D/Sprite2D.scale.y = lerp($Smoothing2D/Sprite2D.scale.y, (1.00 - velocity.length() / 1000) * 0.156, delta * 5)
 	else:
-		if ($Smoothing2D/Sprite2D.scale.x > 0.156):
-			$Smoothing2D/Sprite2D.scale.x -= ($Smoothing2D/Sprite2D.scale.x - 0.156) * delta * 5
-			clamp($Smoothing2D/Sprite2D.scale.x, 0.156, $Smoothing2D/Sprite2D.scale.x)
-		if ($Smoothing2D/Sprite2D.scale.y < 0.156):
-			$Smoothing2D/Sprite2D.scale.y -= ($Smoothing2D/Sprite2D.scale.y - 0.156) * delta * 5
-			clamp($Smoothing2D/Sprite2D.scale.y, $Smoothing2D/Sprite2D.scale.y, 0.156)
+		$Smoothing2D/Sprite2D.scale = lerp($Smoothing2D/Sprite2D.scale, Vector2(0.156, 0.156), delta * 5)
 
 	# emit singal to UI
 	emit_signal("slidingTimerSignal", slidingTimer)
@@ -100,13 +96,12 @@ func _process(delta):
 		velocity = lerp(velocity, Vector2(0, 0), delta * 2)
 		#input = input.cross(velocity) 
 	elif sliding && boostTimer <= 0:
-		inputSpeed *= speed * delta * 20
+		inputSpeed *= speed * delta * 10
 	elif boostTimer <= 0:
 		inputSpeed *= speed * 2
 
 	# add input to velocity
 	if boostTimer <= 0 && !drifting:
-		print("hi")
 		velocity += inputSpeed
 	
 	# if shifting slide
@@ -139,15 +134,23 @@ func _process(delta):
 	#	move_and_slide()
 	
 	boostTimer = clamp(boostTimer, 0, 100)
+	
 func _input(event):
 	pass
 
 func _physics_process(delta):
 		#limit sliding velocity
 	if boostTimer <= 0:
-		velocity = velocity.limit_length(350.0)
+		velocity = velocity.limit_length(300.0)
 	else:
-		velocity = velocity.limit_length(350 + 1000 * boostTimer / 100)
+		velocity = velocity.limit_length(300 + 1000 * boostTimer / 100)
+		
+	var pinball = move_and_collide(Vector2(0,0))
+	if pinball && pinball.get_collider().is_in_group("Flipper") && pinball.get_collider().get_parent().activated:
+		velocity += pinball.get_normal() * 750
+		boostTimer = 100
+		sliding = true
+		print("hi")
 		
 	if sliding:
 		velocity = velocity.move_toward(Vector2(0,0), delta * 125)
@@ -155,10 +158,11 @@ func _physics_process(delta):
 		slidingTimer -= delta * 100
 		
 		if collisionInfo:
-			print(velocity)
 			collisionInfo.get_collider().set("velocity", velocity * 0.5)
 			velocity = velocity.bounce(collisionInfo.get_normal())
 			velocity *= 1.25
+			$Smoothing2D/Sprite2D.scale.x = (1.00 - velocity.length() / 1500) * 0.156
+			$Smoothing2D/Sprite2D.scale.y = (1.00 + velocity.length() / 1500) * 0.156
 			if collisionInfo.get_collider().is_in_group("Enemy"):
 				#collisionInfo.get_collider().decreaseHp(10)
 				# freeze frames

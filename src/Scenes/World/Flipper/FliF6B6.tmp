@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cn55f7s2fvf8"]
+
+[ext_resource type="Script" path="res://addons/smoothing/smoothing_2d.gd" id="1_ua3ch"]
+[ext_resource type="Script" path="res://Scenes/World/Flipper/Flipper.gd" id="1_ufbj6"]
+[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="2_1l2yg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rserd"]
+size = Vector2(36, 4)
+
+[node name="RigidBody2D" type="RigidBody2D"]
+gravity_scale = 0.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(-30, 0)
+contact_monitor = true
+angular_velocity = 17.4533
+angular_damp_mode = 1
+script = ExtResource("1_ufbj6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(2.695, 1)
+shape = SubResource("RectangleShape2D_rserd")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Smoothing2D" type="Node2D" parent="."]
+script = ExtResource("1_ua3ch")
+
+[node name="Sprite2D" type="Sprite2D" parent="Smoothing2D"]
+scale = Vector2(0.764, 0.03)
+texture = ExtResource("2_1l2yg")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

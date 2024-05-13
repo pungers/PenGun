@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5koh40cwj0w0"]
+[gd_scene load_steps=7 format=3 uid="uid://b5koh40cwj0w0"]
 
 [ext_resource type="PackedScene" uid="uid://csee4gnihxo0s" path="res://Scenes/Player/Player.tscn" id="1_3iptj"]
 [ext_resource type="Script" path="res://Scenes/World/world.gd" id="1_lw2ns"]
 [ext_resource type="PackedScene" uid="uid://qgfg7flvbl51" path="res://Scenes/World/map.tscn" id="2_7jtfy"]
 [ext_resource type="PackedScene" uid="uid://bo5n6r3ayio58" path="res://Scenes/Enemy/enemy.tscn" id="3_0hr8t"]
 [ext_resource type="Script" path="res://Scenes/World/Camera.gd" id="5_7iygc"]
+[ext_resource type="PackedScene" uid="uid://cn55f7s2fvf8" path="res://Scenes/World/Flipper/Flipper.tscn" id="6_ye7p3"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_lw2ns")
@@ -36,6 +37,10 @@ scale = Vector2(0.25, 0.25)
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 script = ExtResource("5_7iygc")
+
+[node name="Flipper" parent="." instance=ExtResource("6_ye7p3")]
+position = Vector2(240, -44)
+scale = Vector2(3.51068, -5.79098)
 
 [connection signal="camZoom" from="Player" to="Camera2D" method="_on_player_cam_zoom"]
 [connection signal="slidingTimerSignal" from="Player" to="." method="_on_player_sliding_timer_signal"]
