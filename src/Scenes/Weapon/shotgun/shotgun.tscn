@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkuf5ljygrl6y"]
+
+[ext_resource type="Script" path="res://Scenes/Weapon/shotgun/shotgun.gd" id="1_exqbr"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing_2d.gd" id="2_15v4y"]
+[ext_resource type="Texture2D" uid="uid://ciaf8adq7laxr" path="res://icon.svg" id="3_28h8b"]
+
+[sub_resource type="GDScript" id="GDScript_v6ew6"]
+script/source = "#class_name Weapon
+extends Weapon
+
+#const BULLET_SPEED = 500
+#@onready var bulletObj = preload(\"res://Scenes/Bullet/bullet.tscn\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	pass
+
+func spawnBullet(direction, group):
+	var bullet = bulletObj.instantiate()
+	bullet.add_to_group(group)
+	bullet.position.x = $WeaponSprite/BulletSpawn.global_position.x
+	bullet.position.y = $WeaponSprite/BulletSpawn.global_position.y
+	bullet.scale.y = 0.1
+	bullet.scale.x = 0.1
+	bullet.direction = direction * BULLET_SPEED
+	get_tree().get_root().add_child(bullet)
+	
+	pass
+"
+
+[node name="shotgun" type="Node2D"]
+script = ExtResource("1_exqbr")
+
+[node name="Smoothing2D" type="Node2D" parent="."]
+script = ExtResource("2_15v4y")
+
+[node name="WeaponSprite" type="Sprite2D" parent="Smoothing2D"]
+position = Vector2(21.155, 0)
+scale = Vector2(0.225, 0.035)
+texture = ExtResource("3_28h8b")
+script = SubResource("GDScript_v6ew6")
+
+[node name="BulletSpawn" type="Node2D" parent="."]
+position = Vector2(36, 0)
+scale = Vector2(0.1875, 0.11942)

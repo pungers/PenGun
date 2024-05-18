@@ -14,11 +14,11 @@ collision_layer = 9
 collision_mask = 9
 script = ExtResource("1_861bi")
 
+[node name="Weapon" parent="." instance=ExtResource("3_tl2wp")]
+position = Vector2(65.2, 0)
+
 [node name="Timer" type="Timer" parent="."]
 autostart = true
-
-[node name="Weapon" parent="." instance=ExtResource("3_tl2wp")]
-scale = Vector2(3, 3)
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 4
